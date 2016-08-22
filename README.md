@@ -1,0 +1,2 @@
+# xc
+cross compiling
