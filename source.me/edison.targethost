@@ -1,0 +1,161 @@
+# source this file from IOTIVITY_HOME to setup the iotivity build environment
+
+# CAVEAT: source this after sourcing a devhost; that sets e.g. IOTIVITY_HOME
+
+export IOTIVITY_VERSION=1.1.1
+
+XC_SDK=edison   #  core2-32-poky-linux ???
+XC_SDK_HOME=/opt/poky-edison/1.7.3
+
+export PREFIX=/usr/local
+
+export TARGET_PLATFORM=edison
+export TARGET_PLATFORM_VERSION=1.7.3   # 3.5?
+
+export TARGET_OS=edison  # FIXME poky-edison?
+export TARGET_OS_VERSION=3.10.98-poky-edison+ # $ uname -a
+
+# used by GNU make's implicit rules
+export TARGET_BITS=32
+# the intel toolchain says core2, but edison actually has an atom?
+export TARGET_CPU=i686
+export TARGET_PLATFORM=x86
+export TARGET_MACHINE=i686
+#export TARGET_ABI=??
+
+export TARGET_ARCH="-m32 -march=${TARGET_CPU} -mtune=${TARGET_CPU} -msse3 -mfpmath=sse -mstackrealign"
+
+
+export STAGE=debug
+
+# iotivity networking
+export IP_API=Default
+#export BT_API=Bluedroid
+#export BLE_API=Bluedroid
+#export NFC_API=??
+
+#######################
+####  OUTPUT DIRS  ####
+
+BUILD_HOME=${IOTIVITY_HOME}
+BUILD_SUBDIR=build
+INSTALL_SUBDIR=sysroots
+LIB_SUBDIR=lib
+
+PLATFORM_PREFIX=${TARGET_OS}/${TARGET_MACHINE}/${STAGE}
+
+# BUILD_SYSROOT is where transient built products go, including 3rd party libs like gtest
+export BUILD_SYSROOT=${BUILD_HOME}/${BUILD_SUBDIR}/${PLATFORM_PREFIX}
+
+# installable products go in ${INSTALL_SYSROOT}/${PREFIX}
+export INSTALL_SYSROOT=${BUILD_HOME}/${INSTALL_SUBDIR}/${PLATFORM_PREFIX}
+
+# 3rd-party products go in ${LIB_SYSROOT}/${PREFIX}
+export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${PLATFORM_PREFIX}
+
+# not cross-compiling
+# export INSTALL_SYSROOT=/
+
+###########################
+####  3RD PARTY BUILDS ####
+
+# set prefix to ${IOTIVITY_HOME}/lib/${PLATFORM_PREFIX}
+
+# e.g. for ctest: "cmake -DCMAKE_INSTALL_PREFIX=${IOTIVITY_HOME}/lib/${PLATFORM_PREFIX}
+
+
+
+#######################
+####     JAVA      ####
+# TODO: java-dependent stuff goes in java sdk
+# export JAVA_SDK_HOME=${HOME}/android/sdk
+# export GRADLE_HOME=${HOME}/gradle/gradle-2.1.1
+# export JNIPATH="${HOME}/iotivity/kit/java/jni"
+# JLP = java.library.path
+# export JLP=${JNI_PATH}:${LIBPATH}
+#export LD_LIBRARY_PATH=${JLP}
+#export JLP=${IOTIVITY_LIBPATH}
+
+##################################
+########  TOOLCHAIN VARS  ########
+##################################
+# most toolchain vars taken from /opt/poky-edison/1.7.3/environment-setup-core2-32-poky-linux
+
+export TOOLCHAIN_SYSROOT=${XC_SDK_HOME}/sysroots/i386-pokysdk-darwin
+export TARGET_SYSROOT=${XC_SDK_HOME}/sysroots/core2-32-poky-linux
+export TOOLCHAIN_BIN_PREFIX=i586-poky-linux
+DASH="-"
+
+export ADDR2LINE=${TOOLCHAIN_BIN_PREFIX}${DASH}addr2line
+export AR="${TOOLCHAIN_BIN_PREFIX}${DASH}ar"
+export AS="${TOOLCHAIN_BIN_PREFIX}${DASH}as"
+export CC=${TOOLCHAIN_BIN_PREFIX}${DASH}gcc
+export CPP=${TOOLCHAIN_BIN_PREFIX}${DASH}gcc
+export CXX=${TOOLCHAIN_BIN_PREFIX}${DASH}g++
+export CXXFILT=${TOOLCHAIN_BIN_PREFIX}${DASH}c++filt
+export ELFEDIT=${TOOLCHAIN_BIN_PREFIX}${DASH}elfedit
+export GCOV=${TOOLCHAIN_BIN_PREFIX}${DASH}gcov
+export GDB=${TOOLCHAIN_BIN_PREFIX}${DASH}gdb
+export GPROF=${TOOLCHAIN_BIN_PREFIX}${DASH}gprof
+export LD=${TOOLCHAIN_BIN_PREFIX}${DASH}ld
+export LINK=${TOOLCHAIN_BIN_PREFIX}${DASH}g++   #???
+export NM=${TOOLCHAIN_BIN_PREFIX}${DASH}nm
+export OBJCOPY=${TOOLCHAIN_BIN_PREFIX}${DASH}objcopy
+export OBJDUMP=${TOOLCHAIN_BIN_PREFIX}${DASH}objdump
+export RANLIB=${TOOLCHAIN_BIN_PREFIX}${DASH}ranlib
+export READELF=${TOOLCHAIN_BIN_PREFIX}${DASH}readelf
+export SIZE=${TOOLCHAIN_BIN_PREFIX}${DASH}size
+export STRINGS=${TOOLCHAIN_BIN_PREFIX}${DASH}strings
+export STRIP=${TOOLCHAIN_BIN_PREFIX}${DASH}strip
+
+export INSTALL="install -c"
+export INSTALLDATA="install -c -m 644"
+
+export GTEST_DIR=${HOME}/src/googletest/googletest
+
+SYSFLAG="--sysroot=${TARGET_SYSROOT}"
+
+# HWFLAGS=" -m32 -march=core2 -mtune=core2 -msse3 -mfpmath=sse -mstackrealign ${SYSFLAG}"
+
+OPTIMIZEFLAGS=" -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer"
+#-O2
+
+#scons does not deal with this correctly: export CPPFLAGS="-E ${HWFLAGS}"
+
+# GNU make implicit rules already include ${TARGET_ARCH}
+export CPPFLAGS="${OPTIMIZEFLAGS} ${SYSFLAG}"  #  -Wl,--hash-style=sysv"
+export CFLAGS="-std=c11"
+export CXXFLAGS="-std=c++11"
+export LDFLAGS="-Wl,-O1 -Wl,--hash-style=sysv -Wl,--as-needed"
+
+export LINKFLAGS="${SYSFLAG}"  # -shared"
+
+# SHLINKFLAG and SHLIBSUFFIX are REQUIRED
+# darwin uses "-dynamiclib" and ".dylib", so we need to be explicit:
+#export SHLINKFLAG="-shared"
+export SHLIBSUFFIX=".so"
+
+# C++ std lib
+export CPPPATH="${TARGET_SYSROOT}/usr/include/c++/4.9.1 \
+       ${TARGET_SYSROOT}/usr/include/c++/4.9.1/${TOOLCHAIN_BIN_PREFIX}"
+
+# boost - preinstalled in std locn /usr/lib, usr/include/boost
+
+export CPLUS_INCLUDE_PATH="-I${TARGET_SYSROOT}/usr/include/c++/4.9.1 \
+       -I${TARGET_SYSROOT}/usr/include/c++/4.9.1/${TOOLCHAIN_BIN_PREFIX}"
+
+# we already know what's available on the target so we hardcode:
+export CPPDEFINES="HAVE_ARPA_INET_H \
+       HAVE_ASSERT_H HAVE_FCNTL_H HAVE_LIMITS_H HAVE_NETDB_H \
+       HAVE_NETINET_IN_H HAVE_PTHREAD_CONDATTR_SETCLOCK \
+       HAVE_PTHREAD_H HAVE_STDLIB_H HAVE_STRING_H \
+       HAVE_SYS_SOCKET_H HAVE_SYS_TIME_H HAVE_SYS_TYPES_H \
+       HAVE_TIME_H HAVE_UNISTD_H WITH_POSIX"
+
+#########################################
+################  PATHS  ################
+
+export TOOLCHAIN_PATH=${TOOLCHAIN_SYSROOT}/usr/bin:${TOOLCHAIN_SYSROOT}/usr/bin/${TOOLCHAIN_BIN_PREFIX}
+
+export SYS_PATH=$PATH
+export PATH=${TOOLCHAIN_PATH}:${PATH}

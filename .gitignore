@@ -16,3 +16,17 @@ Makefile.in
 /install-sh
 /missing
 /stamp-h1
+
+*.o
+*.a
+
+# -*- mode: gitignore; -*-
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+

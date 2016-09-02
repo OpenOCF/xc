@@ -1,0 +1,96 @@
+# xc
+cross compiling
+
+
+== meta kits
+
+* http://crosstool-ng.org/[crosstool-ng]
+* https://www.embtoolkit.org/[embtoolkit]
+* https://buildroot.org/[buildroot]
+
+* https://wiki.gentoo.org/wiki/Distcc/Cross-Compiling[distcc/crossdev]  (Gentoo)
+* https://wiki.debian.org/CrossToolchains[debian crosstoolchains]
+== sdks
+
+* https://software.intel.com/en-us/iot/hardware/edison/downloads[edison] - use the "Build your own Yocto Poky image" download (iot-devkit-toolchain-...)
+
+* https://www.zephyrproject.org/doc/getting_started/installation_linux.html[Zephyr] the Linux SDK contains the cross-compile toolchains, for OSX you have to build toolchains using crosstool-ng.
+
+* https://software.intel.com/en-us/intel-system-studio[Intel System Studio] (No OSX host support!)
+* https://software.intel.com/en-us/intel-system-studio-microcontrollers[ISSM] Intel System Studio for Microcontrollers
+* http://www.ti.com/tool/ccstudio[Code Composer Studio]  Texas Instruments
+* http://processors.wiki.ti.com/index.php/Processor_Linux_SDK_GCC_Toolchain[Processor Linux SDK] Texas Instruments
+* https://wiki.linaro.org/WorkingGroups/ToolChain[Linaro Toolchain Working Group]
+* https://developer.arm.com/products/software-development-tools/ds-5-development-studio[DS-5] Development studio from ARM
+
+=== bare metal sdks
+
+* https://developer.arm.com/open-source/gnu-toolchain/gnu-rm[ARM Embedded Toolchain] "Pre-built GNU toolchain for ARM Cortex-M and Cortex-R processors"
+
+== operating systems
+
+=== linux
+
+* https://openwrt.org/[OpenWrt] -  Linux distribution for embedded devices.  Note the spelling: Wrt, not WRT.  Slogan "Wireless Freedom", so I guess the W must stand for Wireless.  Wrt = Wireless real time?
+* https://www.yoctoproject.org/[Yocto Project] "templates, tools and methods to help you create custom Linux-based systems for embedded products regardless of the hardware architecture"
+* https://www.yoctoproject.org/tools-resources/projects/poky[poky] "a reference distribution of the Yocto Project"
+
+* http://openadk.org/[OpenADK] Open Source Appliance Development Kit; "A free construction kit for Embedded Linux"
+
+
+=== build frameworks
+
+* http://www.openembedded.org/wiki/Main_Page[OpenEmbedded]  "the build framework for embedded Linux".  Build system for Yocto.
+
+== libc
+
+* https://www.gnu.org/software/libc/[glibc] GNU libc
+
+Embedded:
+
+* http://www.musl-libc.org/[musl libc]  ("mussel" libc)
+* https://sourceware.org/newlib/[newlib]
+* https://en.wikipedia.org/wiki/Klibc[diet libc]
+* https://uclibc.org/[ulibc]  ("micro" libc) - seems to be moribund if not dead; last release 2012
+* http://www.uclibc-ng.org/[ulibc-ng] - attempt to revive ulibc
+* http://www.eglibc.org/home[eglibc] - embedded glibc (no longer under development)
+
+* https://en.wikipedia.org/wiki/Klibc[klibc] kernel libc - linux startup code
+
+* https://en.wikipedia.org/wiki/Bionic_(software)[bionic libc] - developed by Google for Android
+
+
+== c++ std lib
+
+* https://gcc.gnu.org/libstdc++/[GNU]  Switched to GPL3 after release 4.2
+* http://libcxx.llvm.org/[libc++]   LLVM - "a new implementation".  OSX and FreeBSD only?
+
+Zombies:
+
+* http://stdcxx.apache.org/[STDCXX] - Apache - last release 2008
+* http://stlport.sourceforge.net/[STLport] - last release 2008?
+
+== tools
+
+* http://wiki.qemu.org/Index.html[QEMU]
+
+* http://www.denx.de/wiki/U-Boot/[Das U-Boot]  "the Universal Boot Loader"
+
+* http://compiler-rt.llvm.org/[compiler-rt]  Runtime libraries, LLVM project.
+
+* https://busybox.net/[busybox]
+* http://ieee.uwaterloo.ca/coldfire/gcc-doc/docs/porting_1.html[libgloss]
+
+== references
+
+* http://elinux.org/Toolchains[Toolchains] (elinux)
+
+* http://linuxplumbersconf.org/2015/ocw//system/presentations/2739/original/clang-musl.pdf[Non-GCC toolchain for embedded linux]
+
+* https://wiki.gentoo.org/wiki/Embedded_Handbook/General/Creating_a_cross-compiler[Embedded Handbook/General/Creating a cross-compiler] (Gentoo)
+
+* http://www.vtk.org/Wiki/CMake_Cross_Compiling[CMake Cross Compiling]
+
+* http://preshing.com/20141119/how-to-build-a-gcc-cross-compiler/[How to Build a GCC Cross-Compiler]
+
+* http://shawnhymel.com/809/cross-compiling-on-linux-for-the-edison/[Cross Compiling on Linux for the Edison]

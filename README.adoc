@@ -1,0 +1,162 @@
+= xc
+generic cross compiling toolkit
+
+
+WARNING: Note that "target" is used in two senses.  A "build target"
+is something to be constructed by the build process, so one could
+reasonably think of the output directory where such products are
+placed as a kind of target dir.  But in "target arch" and similar
+"target" refers not to a build product but to the arch etc. for which
+we are building products.  So some TARGET_x vars refer to the latter,
+some to the former.  For example, TARGET_PREFIX controls where some
+build products are to be placed, but TARGET_SYSROOT refers to a
+filesystem location where target-arch binaries, include files etc. are
+to be read by the build process.  We never use TARGET_ to refer to
+writable output directories; instead we use BUILD_ and INSTALL_.
+
+=== Definition of Terms
+
+* XC_SDK - Cross Compile SDK name, e.g. edison
+* XC_SDK_HOME - e.g. /opt/poky-edison/1.7.3
+
+==== prefixes
+
+* PREFIX - this is the standard autotools/make prefix, which
+  determines where built products will be /installed/.  Always interpreted
+  relative to the appropriate SYSROOT (see below) and TARGET_PREFIX.
+  The PREFIX will be the same for all builds.  Default: `/usr/local`
+
+NOTE: PREFIX is only used to control installation of final build
+products; it is not used to control placement of intermediate build
+products.
+
+Installation of build products is determined by:
+
+[source,sh]
+----
+${INSTALL_SYSROOT}/${INSTALL_DIR}/${TARGET_PREFIX}/${PREFIX}
+e.g.
+/tmp/iotivity/sysroots/android/armeabi-v7a/release/usr/local
+----
+
+
+
+* TARGET_PREFIX - this is like PREFIX, but is build-specific, which
+  allows us to build for multiple targets on one host system.  Its
+  form is `<platform>/<arch>/<stage>`, e.g.
+
+[source,sh]
+----
+android/armeabi-v7a/release
+----
+
+[source,sh]
+----
+${BUILD_SYSROOT}/${BUILD_DIR}/${TARGET_PREFIX}
+e.g.
+/tmp/iotivity/builds/android/armeabi-v7a/release
+----
+
+
+==== sysroots
+
+A sysroot is a directory that serves as a virtual filesystem root, the
+conceptual equivalent of "/" on a standard Unix-like system.
+
+* TOOLCHAIN_SYSROOT - a directory within the cross-compile sdk
+  containing cross-compile tools etc.  All tool binaries under this
+  directory will be HOST_ARCH binaries that emit TARGET_ARCH binaries.
+  For example, the TOOLCHAIN_SYSROOT for the Edison cross-compile kit
+  is
+
+[source,sh]
+----
+/opt/poky-edison/1.7.3/sysroots/i386-pokysdk-darwin
+----
+
+* TARGET_SYSROOT - a directory within the xc sdk containing
+  target-specific artifacts.  All binaries under this directory will
+  be TARGET_ARCH binaries.  Also contains target-specific headers etc.
+  For example, the TARGET_SYSROOT of the Edison cross-compile kit is
+
+[source,sh]
+----
+/opt/poky-edison/1.7.3/sysroots/core2-32-poky-linux
+----
+
+The previous two sysroots are read-only; the next two are read-write:
+
+* BUILD_SYSROOT - this is where intermediate build products go.  For
+  example, with Iotivity this defaults to `${IOTIVITY_HOME}`, but it
+  can be set to anything, e.g. `/tmp/iotivity`.  The actual output
+  directory will be formed by combining this with BUILD_DIR, which
+  defaults to `build` (previously: `out`), and TARGET_PREFIX, which is
+  `<platform>/<target_arch>/<stage>`, yielding something like:
+
+[source,sh]
+----
+/tmp/iotivity/build/android/armeabi-v7a/release
+----
+
+* INSTALL_SYSROOT - this is where final build products will be
+  installed.  If TARGET=HOST (i.e. we're not cross-compiling), this
+  will be NIL, so installation will be to `${PREFIX}`(default:
+  `/usr/local`).  For cross-compilation, this will be some other
+  directory.  For example, with Iotivity this defaults to
+  `${IOTIVITY_HOME}`, but it can be set to anything,
+  e.g. `/tmp/iotivity`.  The actual output directory will be formed by
+  combining this with INSTALL_DIR, which defaults to `sysroots`,
+  TARGET_PREFIX, which is `<platform>/<target_arch>/<stage>`, and
+  PREFIX, yielding something like:
+
+[source,sh]
+----
+/tmp/iotivity/sysroots/android/armeabi-v7a/release/usr/local
+----
+
+==== toolchain vars
+
+* TOOLCHAIN_SYSROOT  - read-only, usually a directory under TOOLCHAIN_HOME; not to be confused with TARGET_SYSROOT
+* TOOLCHAIN_BIN_PREFIX - used to construct tool names like `i586-poky-linux-gcc`.
+
+
+==== target vars
+
+* TARGET_PLATFORM - e.g. android, edison, linux, osx, etc.
+* TARGET_PLATFORM_VERSION
+* TARGET_OS
+* TARGET_OS_VERSION
+* TARGET_ARCH
+* TARGET_ARCH_ABI - e.g. armeabi-v7a, x86, etc.
+* TARGET_SYSROOT - read-only, usually a directory under TOOLCHAIN_HOME
+
+==== tools
+
+Cross-compile toolkits contain a subset of a standard set of tools
+such as `ar`, `gcc`, `ranlib`, etc.  Most commonly these are named
+using a TOOLCHAIN_BIN_PREFIX; for example, the Edison cross-compile
+toolkit uses `i586-poky-linux`, so gcc is `i586-poky-linux-gcc`.
+
+* ADDR2LINE=${TOOLCHAIN_BIN_PREFIX}-addr2line
+* AR="${TOOLCHAIN_BIN_PREFIX}-ar"
+* AS="${TOOLCHAIN_BIN_PREFIX}-as"
+* CC=${TOOLCHAIN_BIN_PREFIX}-gcc
+* CPP=${TOOLCHAIN_BIN_PREFIX}-gcc
+* CXX=${TOOLCHAIN_BIN_PREFIX}-g++
+* CXXFILT=${TOOLCHAIN_BIN_PREFIX}-c++filt
+* ELFEDIT=${TOOLCHAIN_BIN_PREFIX}-elfedit
+* GCOV=${TOOLCHAIN_BIN_PREFIX}-gcov
+* GDB=${TOOLCHAIN_BIN_PREFIX}-gdb
+* GPROF=${TOOLCHAIN_BIN_PREFIX}-gprof
+* LD=${TOOLCHAIN_BIN_PREFIX}-ld
+* NM=${TOOLCHAIN_BIN_PREFIX}-nm
+* OBJCOPY=${TOOLCHAIN_BIN_PREFIX}-objcopy
+* OBJDUMP=${TOOLCHAIN_BIN_PREFIX}-objdump
+* RANLIB=${TOOLCHAIN_BIN_PREFIX}-ranlib
+* READELF=${TOOLCHAIN_BIN_PREFIX}-readelf
+* SIZE=${TOOLCHAIN_BIN_PREFIX}-size
+* STRINGS=${TOOLCHAIN_BIN_PREFIX}-strings
+* STRIP=${TOOLCHAIN_BIN_PREFIX}-strip
+
+NOTE: Linking C+ + code with LD often (always?) won't work, so LD
+should be set to ${TOOLCHAIN_BIN_PREFIX}-g++ in such cases.

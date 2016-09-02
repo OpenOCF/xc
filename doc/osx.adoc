@@ -1,0 +1,14 @@
+= cross-compiling on os x
+
+
+versioning:
+
+https://github.com/acmorrow/scons-versioned-lib-demo/blob/master/src/SConscript
+
+cmake:
+
+http://www.vtk.org/Wiki/CMake_Cross_Compiling#The_toolchain_file
+
+==== references
+
+* https://blogs.oracle.com/dipol/entry/dynamic_libraries_rpath_and_mac[Dynamic Libraries, RPATH, and Mac OS]

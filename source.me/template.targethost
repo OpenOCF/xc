@@ -1,0 +1,133 @@
+# source this file from IOTIVITY_HOME to setup the iotivity build environment
+
+# CAVEAT: source this after sourcing a devhost; that sets e.g. IOTIVITY_HOME
+
+export IOTIVITY_VERSION=1.1.1
+
+XC_SDK=edison   #  core2-32-poky-linux ???
+XC_SDK_HOME=/opt/poky-edison/1.7.3
+
+export PREFIX=/usr/local
+
+export TARGET_PLATFORM=edison
+export TARGET_PLATFORM_VERSION=1.7.3   # 3.5?
+
+export TARGET_OS=poky-edison  # FIXME
+export TARGET_OS_VERSION=3.10.98-poky-edison+ # $ uname -a
+
+export TARGET_ARCH=i686		      # $ arch
+
+export STAGE=release
+
+# iotivity networking
+export IP_API=Default
+#export BT_API=Bluedroid
+#export BLE_API=Bluedroid
+#export NFC_API=??
+
+#######################
+####  OUTPUT DIRS  ####
+
+BUILD_DIR=build
+INSTALL_DIR=sysroots  # cross-compiling; otherwise, unset it
+
+BUILD_SYSROOT=${IOTIVITY_HOME}
+INSTALL_SYSROOT=${IOTIVITY_HOME}
+
+TARGET_PREFIX=${TARGET_PLATFORM}/${TARGET_ARCH}/${STAGE}
+
+# BUILD_OUT is where intermediate built products go, including 3rd party libs like gtest
+
+export BUILD_OUT=${BUILD_SYSROOT}/${BUILD_DIR}/${TARGET_PREFIX}
+
+# cross-compiling
+export INSTALL_DIR=${INSTALL_SYSROOT}/${INSTALL_DIR}/${TARGET_PREFIX}/${PREFIX}
+
+# not cross-compiling
+# export INSTALL_DIR=${PREFIX}
+
+###########################
+####  3RD PARTY BUILDS ####
+
+# set prefix to ${IOTIVITY_HOME}/lib/${TARGET_PREFIX}
+
+# e.g. for ctest: "cmake -DCMAKE_INSTALL_PREFIX=${IOTIVITY_HOME}/lib/${TARGET_PREFIX}
+
+
+
+#######################
+####     JAVA      ####
+# TODO: java-dependent stuff goes in java sdk
+# export JAVA_SDK_HOME=${HOME}/android/sdk
+# export GRADLE_HOME=${HOME}/gradle/gradle-2.1.1
+# export JNIPATH="${HOME}/iotivity/kit/java/jni"
+# JLP = java.library.path
+# export JLP=${JNI_PATH}:${LIBPATH}
+#export LD_LIBRARY_PATH=${JLP}
+#export JLP=${IOTIVITY_LIBPATH}
+
+##################################
+########  TOOLCHAIN VARS  ########
+##################################
+# most toolchain vars taken from /opt/poky-edison/1.7.3/environment-setup-core2-32-poky-linux
+
+export TOOLCHAIN_SYSROOT=${XC_SDK_HOME}/sysroots/i386-pokysdk-darwin
+export TARGET_SYSROOT=${XC_SDK_HOME}/sysroots/core2-32-poky-linux
+export TOOLCHAIN_BIN_PREFIX=i586-poky-linux
+
+export ADDR2LINE=${TOOLCHAIN_BIN_PREFIX}-addr2line
+export AR="${TOOLCHAIN_BIN_PREFIX}-ar"
+export AS="${TOOLCHAIN_BIN_PREFIX}-as"
+export CC=${TOOLCHAIN_BIN_PREFIX}-gcc
+export CPP=${TOOLCHAIN_BIN_PREFIX}-gcc
+export CXX=${TOOLCHAIN_BIN_PREFIX}-g++
+export CXXFILT=${TOOLCHAIN_BIN_PREFIX}-c++filt
+export ELFEDIT=${TOOLCHAIN_BIN_PREFIX}-elfedit
+export GCOV=${TOOLCHAIN_BIN_PREFIX}-gcov
+export GDB=${TOOLCHAIN_BIN_PREFIX}-gdb
+export GPROF=${TOOLCHAIN_BIN_PREFIX}-gprof
+export LD=${TOOLCHAIN_BIN_PREFIX}-ld
+export LINK=${TOOLCHAIN_BIN_PREFIX}-g++   #???
+export NM=${TOOLCHAIN_BIN_PREFIX}-nm
+export OBJCOPY=${TOOLCHAIN_BIN_PREFIX}-objcopy
+export OBJDUMP=${TOOLCHAIN_BIN_PREFIX}-objdump
+export RANLIB=${TOOLCHAIN_BIN_PREFIX}-ranlib
+export READELF=${TOOLCHAIN_BIN_PREFIX}-readelf
+export SIZE=${TOOLCHAIN_BIN_PREFIX}-size
+export STRINGS=${TOOLCHAIN_BIN_PREFIX}-strings
+export STRIP=${TOOLCHAIN_BIN_PREFIX}-strip
+
+SYSFLAG="--sysroot=${TARGET_SYSROOT}"
+
+HWFLAGS=" -m32 -march=core2 -mtune=core2 -msse3 -mfpmath=sse -mstackrealign -fno-omit-frame-pointer ${SYSFLAG}"
+
+SWFLAGS=" -O2 -pipe -g -feliminate-unused-debug-types"
+
+#scons does not deal with this correctly: export CPPFLAGS="-E ${HWFLAGS}"
+export CPPFLAGS=""
+export CFLAGS="${HWFLAGS} ${SWFLAGS} -std=c11"
+export CXXFLAGS="${HWFLAGS} ${SWFLAGS} -std=c++11"
+export LDFLAGS="-Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed"
+
+export LINKFLAGS="${SYSFLAG} -shared"
+
+export SHLIBSUFFIX=".so"
+
+export CPPPATH="${TARGET_SYSROOT}/usr/include/c++/4.9.1 \
+       ${TARGET_SYSROOT}/usr/include/c++/4.9.1/${TOOLCHAIN_BIN_PREFIX}"
+
+# we already know what's available on the target so we hardcode:
+export CPPDEFINES="HAVE_ARPA_INET_H \
+       HAVE_ASSERT_H HAVE_FCNTL_H HAVE_LIMITS_H HAVE_NETDB_H \
+       HAVE_NETINET_IN_H HAVE_PTHREAD_CONDATTR_SETCLOCK \
+       HAVE_PTHREAD_H HAVE_STDLIB_H HAVE_STRING_H \
+       HAVE_SYS_SOCKET_H HAVE_SYS_TIME_H HAVE_SYS_TYPES_H \
+       HAVE_TIME_H HAVE_UNISTD_H WITH_POSIX"
+
+#########################################
+################  PATHS  ################
+
+export TOOLCHAIN_PATH=${TOOLCHAIN_SYSROOT}/usr/bin:${TOOLCHAIN_SYSROOT}/usr/bin/${TOOLCHAIN_BIN_PREFIX}
+
+export SYS_PATH=$PATH
+export PATH=${TOOLCHAIN_PATH}:${PATH}
