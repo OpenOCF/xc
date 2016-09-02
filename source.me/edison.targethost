@@ -17,14 +17,13 @@ export TARGET_OS_VERSION=3.10.98-poky-edison+ # $ uname -a
 
 # used by GNU make's implicit rules
 export TARGET_BITS=32
-# the intel toolchain says core2, but edison actually has an atom?
-export TARGET_CPU=i686
-export TARGET_PLATFORM=x86
-export TARGET_MACHINE=i686
+# the intel toolchain says core2, but edison actually has an atom? "$ arch" says i686
+export TARGET_PROCESSOR=core2	# $ uname -p?
+export TARGET_PLATFORM=x86	# $ uname -m?
+export TARGET_MACHINE=i686	# $ arch, $ uname -m
 #export TARGET_ABI=??
 
-export TARGET_ARCH="-m32 -march=${TARGET_CPU} -mtune=${TARGET_CPU} -msse3 -mfpmath=sse -mstackrealign"
-
+export TARGET_ARCH="-m32 -march=${TARGET_PROCESSOR} -mtune=${TARGET_PROCESSOR} -msse3 -mfpmath=sse -mstackrealign"
 
 export STAGE=debug
 
@@ -50,8 +49,8 @@ export BUILD_SYSROOT=${BUILD_HOME}/${BUILD_SUBDIR}/${PLATFORM_PREFIX}
 # installable products go in ${INSTALL_SYSROOT}/${PREFIX}
 export INSTALL_SYSROOT=${BUILD_HOME}/${INSTALL_SUBDIR}/${PLATFORM_PREFIX}
 
-# 3rd-party products go in ${LIB_SYSROOT}/${PREFIX}
-export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${PLATFORM_PREFIX}
+# 3rd-party, project-specific products (e.g. gtest) go in ${LIB_SYSROOT}/${PREFIX}
+export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_OS}/${TARGET_MACHINE}
 
 # not cross-compiling
 # export INSTALL_SYSROOT=/
