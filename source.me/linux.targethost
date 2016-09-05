@@ -1,0 +1,161 @@
+# source this file from IOTIVITY_HOME to setup the iotivity build environment
+
+# CAVEAT: source this after sourcing a devhost; that sets e.g. IOTIVITY_HOME
+
+# cat /etc/os-release:  Ubuntu 16.04.1 LTS (Xenial Xirus)
+
+export TARGET_PLATFORM=ubuntu
+#export TARGET_PLATFORM_VERSION=16.04
+
+# uname -srv
+export TARGET_OS=linux
+export TARGET_OS_VERSION=4.4.0
+
+
+# TARGET_ARCH follows GNU make convention - it's where you set flags
+#unset TARGET_ARCH
+TARGET_ARCH=" -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse -mstackrealign"
+#  uname -m  (= arch)
+TARGET_MACHINE=x86_64
+#  uname -p
+TARGET_PROCESSOR=x86_64
+#  uname -i
+TARGET_HWPLATFORM=x86_64
+
+#EDIT: STAGE= debug | dev | prod ??
+export STAGE=debug
+
+# EDIT:
+#export GTEST_DIR=${HOME}/src/googletest/googletest
+export GTEST_DIR=/home/gregg/src/googletest/googletest
+
+
+# iotivity networking
+export IP_API=Default
+#export BT_API=Bluedroid
+#export BLE_API=Bluedroid
+#export NFC_API=??
+
+#######################
+####  OUTPUT DIRS  ####
+
+export PREFIX=/usr/local
+
+# platform prefix e.g.  darwin/x86_64/release
+PLATFORM_PREFIX=${TARGET_PLATFORM}/${TARGET_MACHINE}/${STAGE}
+
+# IOTIVITY_HOME is set by <platform>.devhost sourcefile
+BUILD_HOME=${IOTIVITY_HOME}
+
+# BUILD_SYSROOT is where product-specific transient built products go
+BUILD_SUBDIR=build
+export BUILD_SYSROOT=${BUILD_HOME}/${BUILD_SUBDIR}/${PLATFORM_PREFIX}
+
+
+INSTALL_SUBDIR=sysroots
+LIB_SUBDIR=lib
+
+# installable products go in ${INSTALL_SYSROOT}/${PREFIX}
+export INSTALL_SYSROOT=${BUILD_HOME}/${INSTALL_SUBDIR}/${PLATFORM_PREFIX}
+
+# 3rd-party products go in ${LIB_SYSROOT}/${PREFIX}
+export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${PLATFORM_PREFIX}
+
+# not cross-compiling
+# export INSTALL_SYSROOT=/
+
+###########################
+####  3RD PARTY BUILDS ####
+
+# set prefix to ${IOTIVITY_HOME}/lib/${PLATFORM_PREFIX}
+
+# e.g. for ctest: "cmake -DCMAKE_INSTALL_PREFIX=${IOTIVITY_HOME}/lib/${PLATFORM_PREFIX}
+
+
+
+#######################
+####     JAVA      ####
+# TODO: java-dependent stuff goes in java sdk
+# export JAVA_SDK_HOME=${HOME}/android/sdk
+# export GRADLE_HOME=${HOME}/gradle/gradle-2.1.1
+# export JNIPATH="${HOME}/iotivity/kit/java/jni"
+# JLP = java.library.path
+# export JLP=${JNI_PATH}:${LIBPATH}
+#export LD_LIBRARY_PATH=${JLP}
+#export JLP=${IOTIVITY_LIBPATH}
+
+##################################
+########  TOOLCHAIN VARS  ########
+##################################
+
+unset TOOLCHAIN_SYSROOT
+unset TARGET_SYSROOT
+unset TOOLCHAIN_BIN_PREFIX
+
+export ADDR2LINE=${TOOLCHAIN_BIN_PREFIX}addr2line
+export AR="${TOOLCHAIN_BIN_PREFIX}ar"
+export AS="${TOOLCHAIN_BIN_PREFIX}as"
+export CC=${TOOLCHAIN_BIN_PREFIX}gcc
+export CPP=${TOOLCHAIN_BIN_PREFIX}gcc
+export CXX=${TOOLCHAIN_BIN_PREFIX}g++
+export CXXFILT=${TOOLCHAIN_BIN_PREFIX}c++filt
+export ELFEDIT=${TOOLCHAIN_BIN_PREFIX}elfedit
+export GCOV=${TOOLCHAIN_BIN_PREFIX}gcov
+export GDB=${TOOLCHAIN_BIN_PREFIX}gdb
+export GPROF=${TOOLCHAIN_BIN_PREFIX}gprof
+export LD=${TOOLCHAIN_BIN_PREFIX}ld
+export LINK=${TOOLCHAIN_BIN_PREFIX}g++   #???
+export NM=${TOOLCHAIN_BIN_PREFIX}nm
+export OBJCOPY=${TOOLCHAIN_BIN_PREFIX}objcopy
+export OBJDUMP=${TOOLCHAIN_BIN_PREFIX}objdump
+export RANLIB=${TOOLCHAIN_BIN_PREFIX}ranlib
+export READELF=${TOOLCHAIN_BIN_PREFIX}readelf
+export SIZE=${TOOLCHAIN_BIN_PREFIX}size
+export STRINGS=${TOOLCHAIN_BIN_PREFIX}strings
+export STRIP=${TOOLCHAIN_BIN_PREFIX}strip
+
+export INSTALL="install -c"
+export INSTALLDATA="install -c -m 644"
+
+unset SYSFLAG
+# SYSFLAG="--sysroot=${TARGET_SYSROOT}"
+
+OPTIMIZEFLAGS=" -O2 -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer"
+
+export CPPFLAGS="${OPTIMIZEFLAGS} ${SYSFLAG}"
+export CFLAGS="-std=c11"
+export CXXFLAGS="-std=c++11"
+export LDFLAGS="-Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed"
+
+export LINKFLAGS="${SYSFLAG}"  # -shared"
+
+# SHLINKFLAG and SHLIBSUFFIX are REQUIRED
+# darwin uses "-dynamiclib" and ".dylib", so we need to be explicit:
+unset SHLINKFLAG
+unset SHLIBSUFFIX
+
+# C++ std lib
+export CPPPATH="${TARGET_SYSROOT}/usr/include/c++/4.9.1 \
+       ${TARGET_SYSROOT}/usr/include/c++/4.9.1/${TOOLCHAIN_BIN_PREFIX}"
+
+# boost - preinstalled in std locn /usr/lib, usr/include/boost
+
+export CPLUS_INCLUDE_PATH="-I${TARGET_SYSROOT}/usr/include/c++/4.9.1 \
+       -I${TARGET_SYSROOT}/usr/include/c++/4.9.1/${TOOLCHAIN_BIN_PREFIX}"
+
+# for iotivity:
+# we already know what's available on the target so we hardcode:
+# export CPPDEFINES="HAVE_ARPA_INET_H \
+#        HAVE_ASSERT_H HAVE_FCNTL_H HAVE_LIMITS_H HAVE_NETDB_H \
+#        HAVE_NETINET_IN_H HAVE_PTHREAD_CONDATTR_SETCLOCK \
+#        HAVE_PTHREAD_H HAVE_STDLIB_H HAVE_STRING_H \
+#        HAVE_SYS_SOCKET_H HAVE_SYS_TIME_H HAVE_SYS_TYPES_H \
+#        HAVE_TIME_H HAVE_UNISTD_H WITH_POSIX"
+
+#########################################
+################  PATHS  ################
+
+export TOOLCHAIN_PATH=${TOOLCHAIN_SYSROOT}/usr/bin:${TOOLCHAIN_SYSROOT}/usr/bin/${TOOLCHAIN_BIN_PREFIX}
+
+export SYS_PATH=$PATH
+export PATH=${TOOLCHAIN_PATH}:${PATH}

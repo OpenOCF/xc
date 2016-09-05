@@ -1,12 +1,6 @@
 # source this file from IOTIVITY_HOME to setup the iotivity build environment
 
 # CAVEAT: source this after sourcing a devhost; that sets e.g. IOTIVITY_HOME
-
-export IOTIVITY_VERSION=1.1.1
-
-XC_SDK=edison   #  core2-32-poky-linux ???
-XC_SDK_HOME=/opt/poky-edison/1.7.3
-
 export PREFIX=/usr/local
 
 export TARGET_PLATFORM=edison
@@ -80,7 +74,9 @@ export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_OS}/${TARGET_MACHINE}
 ##################################
 # most toolchain vars taken from /opt/poky-edison/1.7.3/environment-setup-core2-32-poky-linux
 
-export TOOLCHAIN_SYSROOT=${XC_SDK_HOME}/sysroots/i386-pokysdk-darwin
+# this depends on host config:
+export TOOLCHAIN_SYSROOT=${XC_SDK_HOME}/sysroots/${TOOLCHAIN_HOST}
+
 export TARGET_SYSROOT=${XC_SDK_HOME}/sysroots/core2-32-poky-linux
 export TOOLCHAIN_BIN_PREFIX=i586-poky-linux
 DASH="-"
@@ -131,7 +127,7 @@ export LINKFLAGS="${SYSFLAG}"  # -shared"
 
 # SHLINKFLAG and SHLIBSUFFIX are REQUIRED
 # darwin uses "-dynamiclib" and ".dylib", so we need to be explicit:
-#export SHLINKFLAG="-shared"
+export SHLINKFLAG="-shared"
 export SHLIBSUFFIX=".so"
 
 # C++ std lib

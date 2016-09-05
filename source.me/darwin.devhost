@@ -4,11 +4,6 @@ export HOST_PLATFORM=osx
 export HOST_OS=darwin
 export HOST_ARCH=x86_64
 
-# export IOTIVITY_TARGET_OS=darwin
-# export IOTIVITY_TARGET_ARCH=x86_64
-
-# export IOTIVITY_STAGE=release
-
 export IOTIVITY_HOME=${HOME}/iotivity/iochibity
 
 
@@ -20,20 +15,22 @@ export IOTIVITY_IP_API=Default
 #export IOTIVITY_NFC_API=??
 
 
-#######################
-####  OUTPUT DIRS  ####
+export TOOLCHAIN_SYSROOT=${XC_SDK_HOME}/sysroots/i386-pokysdk-darwin
 
-BUILD_HOME=${IOTIVITY_HOME}
-BUILD_SUBDIR=build
-INSTALL_SUBDIR=sysroots
+# #######################
+# ####  OUTPUT DIRS  ####
 
-PLATFORM_PREFIX=${HOST_OS}/${HOST_ARCH}/${STAGE}
+# BUILD_HOME=${IOTIVITY_HOME}
+# BUILD_SUBDIR=build
+# INSTALL_SUBDIR=sysroots
 
-# BUILD_SYSROOT is where transient built products go, including 3rd party libs like gtest
-export BUILD_SYSROOT=${BUILD_HOME}/${BUILD_SUBDIR}/${PLATFORM_PREFIX}
+# PLATFORM_PREFIX=${HOST_OS}/${HOST_ARCH}/${STAGE}
 
-# installable products go in ${INSTALL_SYSROOT}/${PREFIX}
-export INSTALL_SYSROOT=${INSTALL_SYSROOT}/${INSTALL_DIR}/${PLATFORM_PREFIX}
+# # BUILD_SYSROOT is where transient built products go, including 3rd party libs like gtest
+# export BUILD_SYSROOT=${BUILD_HOME}/${BUILD_SUBDIR}/${PLATFORM_PREFIX}
+
+# # installable products go in ${INSTALL_SYSROOT}/${PREFIX}
+# export INSTALL_SYSROOT=${INSTALL_SYSROOT}/${INSTALL_DIR}/${PLATFORM_PREFIX}
 
 # not cross-compiling
 # export INSTALL_SYSROOT=/
