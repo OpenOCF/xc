@@ -1,0 +1,30 @@
+= architecture
+
+=== ARM
+
+https://en.wikipedia.org/wiki/ARM_architecture[ARM architecture (Wikipedia)]
+
+https://en.wikipedia.org/wiki/List_of_ARM_microarchitectures[List of ARM microarchitectures]
+
+* http://www.arm.com/products/processors/armv8-architecture.php[ARMv8-A]  "The ARMv8 architecture introduces 64-bit support to the ARM architecture with a focus on power-efficient implementation while maintaining compatibility with existing 32-bit software."
+
+Terminology:
+
+* architecture (ARMv8-A)
+* execution state (AArch64, AArch32)
+* instruction set (A32, T32, A64)
+
+```
+Two main execution states:
+AArch64 - The 64-bit execution state including exception model, memory model, programmers' model and instruction set support for that state
+AArch32 - The 32-bit execution state including exception model, memory model, programmers' model and instruction set support for that state
+
+The execution states support three key instruction sets:
+
+A32 (or ARM): a 32-bit fixed length instruction set, enhanced through the different architecture variants. Part of the 32-bit architecture execution environment now referred to as AArch32.
+T32 (Thumb) introduced as a 16-bit fixed-length instruction set, subsequently enhanced to a mixed-length 16- and 32-bit instruction set on the introduction of Thumb-2 technology. Part of the 32-bit architecture execution environment now referred to as AArch32.
+A64 is a 64-bit fixed-length instruction set that offers similar functionality to the ARM and Thumb instruction sets. Introduced with ARMv8-A, it is the AArch64 instruction set.
+```
+
+* AArch64 is the name for the new 64-bit ARM architecture, also known as ARMv8 or ARM64.
+https://fedoraproject.org/wiki/Architectures/AArch64

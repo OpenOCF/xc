@@ -12,9 +12,9 @@ export TARGET_OS_VERSION=3.10.98-poky-edison+ # $ uname -a
 # used by GNU make's implicit rules
 export TARGET_BITS=32
 # the intel toolchain says core2, but edison actually has an atom? "$ arch" says i686
-export TARGET_PROCESSOR=core2	# $ uname -p?
-export TARGET_PLATFORM=x86	# $ uname -m?
 export TARGET_MACHINE=i686	# $ arch, $ uname -m
+export TARGET_PROCESSOR=core2	# $ uname -p?
+export TARGET_HWPLATFORM=x86	# $ uname -m?
 #export TARGET_ABI=??
 
 export TARGET_ARCH="-m32 -march=${TARGET_PROCESSOR} -mtune=${TARGET_PROCESSOR} -msse3 -mfpmath=sse -mstackrealign"

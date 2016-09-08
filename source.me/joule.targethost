@@ -2,10 +2,10 @@
 
 # CAVEAT: source this after sourcing a devhost; that sets e.g. IOTIVITY_HOME
 
-# cat /etc/os-release:  Ubuntu 16.04.1 LTS (Xenial Xirus)
+# cat /etc/os-release:  Ostro 16.04.1 LTS (Xenial Xirus)
 
-export TARGET_PLATFORM=ubuntu
-#export TARGET_PLATFORM_VERSION=16.04
+export TARGET_PLATFORM=ostro
+#export TARGET_PLATFORM_VERSION=
 
 # uname -srv
 export TARGET_OS=linux
@@ -76,15 +76,7 @@ export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${PLATFORM_PREFIX}
 #######################
 ####     JAVA      ####
 # TODO: java-dependent stuff goes in java sdk
-export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-#export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-
-export JDK_HOME=/usr/lib/jvm/java-8-oracle
-#export JDK_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-
-export JDK_INCLUDE_FLAGS="-I${JDK_HOME}/include -I${JDK_HOME}/include/${HOST_OS}"
-
-# export ANDROID_SDK_HOME=${HOME}/android/sdk
+# export JAVA_SDK_HOME=${HOME}/android/sdk
 # export GRADLE_HOME=${HOME}/gradle/gradle-2.1.1
 # export JNIPATH="${HOME}/iotivity/kit/java/jni"
 # JLP = java.library.path

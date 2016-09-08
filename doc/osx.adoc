@@ -1,5 +1,11 @@
 = cross-compiling on os x
 
+http://www.carlson-minot.com/mac-os-x-cross-toolchains/mac-os-x-cross-toolchain-faqs
+
+https://github.com/tpoechtrager/osxcross
+
+http://www.ethernut.de/en/documents/cross-toolchain-osx.html
+
 
 versioning:
 
