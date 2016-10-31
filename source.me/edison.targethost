@@ -1,25 +1,36 @@
 # source this file from IOTIVITY_HOME to setup the iotivity build environment
 
 # CAVEAT: source this after sourcing a devhost; that sets e.g. IOTIVITY_HOME
-export PREFIX=/usr/local
-
 export TARGET_PLATFORM=edison
 export TARGET_PLATFORM_VERSION=1.7.3   # 3.5?
 
-export TARGET_OS=edison  # FIXME poky-edison?
+# uname -s
+export TARGET_KERNEL=linux
+
+export TARGET_OS=poky-edison
 export TARGET_OS_VERSION=3.10.98-poky-edison+ # $ uname -a
 
 # used by GNU make's implicit rules
 export TARGET_BITS=32
+# $ arch, $ uname -m
+export TARGET_MACHINE=i686
 # the intel toolchain says core2, but edison actually has an atom? "$ arch" says i686
-export TARGET_MACHINE=i686	# $ arch, $ uname -m
-export TARGET_PROCESSOR=core2	# $ uname -p?
-export TARGET_HWPLATFORM=x86	# $ uname -m?
+# uname -p => unkown, take it from the cross-compile sdk:
+export TARGET_PROCESSOR=core2
+# $ uname -i => unknown, use ARCH from cross-compile sdk
+export TARGET_HWPLATFORM=x86
+
 #export TARGET_ABI=??
 
-export TARGET_ARCH="-m32 -march=${TARGET_PROCESSOR} -mtune=${TARGET_PROCESSOR} -msse3 -mfpmath=sse -mstackrealign"
+# TARGET_ARCH follows GNU make convention - it's where you set flags
+#unset TARGET_ARCH
+export TARGET_ARCH="-m${TARGET_BITS} -march=${TARGET_PROCESSOR} -mtune=${TARGET_PROCESSOR} -msse3 -mfpmath=sse -mstackrealign"
 
+#EDIT: STAGE= debug | dev | prod ??
 export STAGE=debug
+
+# EDIT:
+export GTEST_DIR=${HOME}/src/googletest/googletest
 
 # iotivity networking
 export IP_API=Default
@@ -30,21 +41,27 @@ export IP_API=Default
 #######################
 ####  OUTPUT DIRS  ####
 
-BUILD_HOME=${IOTIVITY_HOME}
-BUILD_SUBDIR=build
-INSTALL_SUBDIR=sysroots
-LIB_SUBDIR=lib
+export PREFIX=/usr/local
 
-PLATFORM_PREFIX=${TARGET_OS}/${TARGET_MACHINE}/${STAGE}
+# platform prefix e.g.  edison/x86/debug
+PLATFORM_PREFIX=${TARGET_PLATFORM}/${TARGET_HWPLATFORM}/${STAGE}
+
+# IOTIVITY_HOME is set by <platform>.devhost sourcefile
+BUILD_HOME=${IOTIVITY_HOME}
 
 # BUILD_SYSROOT is where transient built products go, including 3rd party libs like gtest
+BUILD_SUBDIR=build
 export BUILD_SYSROOT=${BUILD_HOME}/${BUILD_SUBDIR}/${PLATFORM_PREFIX}
 
 # installable products go in ${INSTALL_SYSROOT}/${PREFIX}
+INSTALL_SUBDIR=sysroots
 export INSTALL_SYSROOT=${BUILD_HOME}/${INSTALL_SUBDIR}/${PLATFORM_PREFIX}
 
+
 # 3rd-party, project-specific products (e.g. gtest) go in ${LIB_SYSROOT}/${PREFIX}
-export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_OS}/${TARGET_MACHINE}
+# NB: we do not build separately for each stage (dev, test, prod)
+LIB_SUBDIR=lib
+export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_PLATFORM}/${TARGET_HWPLATFORM}
 
 # not cross-compiling
 # export INSTALL_SYSROOT=/
@@ -56,12 +73,14 @@ export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_OS}/${TARGET_MACHINE}
 
 # e.g. for ctest: "cmake -DCMAKE_INSTALL_PREFIX=${IOTIVITY_HOME}/lib/${PLATFORM_PREFIX}
 
-
-
 #######################
 ####     JAVA      ####
 # TODO: java-dependent stuff goes in java sdk
-# export JAVA_SDK_HOME=${HOME}/android/sdk
+export TARGET_JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+export TARGET_JDK_HOME=${TARGET_JAVA_HOME}
+
+export TARGET_JDK_INCLUDE_FLAGS="-I${JDK_HOME}/include -I${JDK_HOME}/include/${TARGET_KERNEL}"
+
 # export GRADLE_HOME=${HOME}/gradle/gradle-2.1.1
 # export JNIPATH="${HOME}/iotivity/kit/java/jni"
 # JLP = java.library.path
@@ -106,19 +125,17 @@ export STRIP=${TOOLCHAIN_BIN_PREFIX}${DASH}strip
 export INSTALL="install -c"
 export INSTALLDATA="install -c -m 644"
 
-export GTEST_DIR=${HOME}/src/googletest/googletest
-
+#unset SYSFLAG
 SYSFLAG="--sysroot=${TARGET_SYSROOT}"
 
-# HWFLAGS=" -m32 -march=core2 -mtune=core2 -msse3 -mfpmath=sse -mstackrealign ${SYSFLAG}"
+WARNFLAGS="-Wall -Wextra"
 
-OPTIMIZEFLAGS=" -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer"
-#-O2
+OPTIMIZEFLAGS=" -O2 -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer"
 
 #scons does not deal with this correctly: export CPPFLAGS="-E ${HWFLAGS}"
 
 # GNU make implicit rules already include ${TARGET_ARCH}
-export CPPFLAGS="${OPTIMIZEFLAGS} ${SYSFLAG}"  #  -Wl,--hash-style=sysv"
+export CPPFLAGS="-fPIC ${OPTIMIZEFLAGS} ${WARNFLAGS} ${SYSFLAG}"  #  -Wl,--hash-style=sysv"
 export CFLAGS="-std=c11"
 export CXXFLAGS="-std=c++11"
 export LDFLAGS="-Wl,-O1 -Wl,--hash-style=sysv -Wl,--as-needed"

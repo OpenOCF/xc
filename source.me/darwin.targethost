@@ -2,19 +2,41 @@
 
 # CAVEAT: source this after sourcing a devhost; that sets e.g. IOTIVITY_HOME
 
-export IOTIVITY_VERSION=1.1.1
-
-export PREFIX=/usr/local
+# $ sw_vers
+# ProductName:   	Mac OS X
+# ProductVersion:	10.11.5
+# BuildVersion:  	15F34
 
 export TARGET_PLATFORM=darwin
 export TARGET_PLATFORM_VERSION=10.11
 
+# ??? freebsd? mach?
+export TARGET_KERNEL=mach
+
+# $ uname -s  (lower-cased)
 export TARGET_OS=darwin
-export TARGET_OS_VERSION=
+# $ uname -r
+export TARGET_OS_VERSION=15.5.0
 
-TARGET_ARCH_TAG=x86_64
+export TARGET_BITS=64
+#  uname -m
+TARGET_MACHINE=x86_64
+#  uname -p  (= arch)
+TARGET_PROCESSOR=i386
 
-export STAGE=release
+TARGET_HWPLATFORM=x86_64
+
+#export TARGET_ABI=??
+
+# TARGET_ARCH follows GNU make convention - it's where you set flags
+unset TARGET_ARCH
+# TARGET_ARCH=" -m64 -march=${TARGET_PROCESSOR} -mtune=${TARGET_PROCESSOR}
+# -msse3 -mfpmath=sse -mstackrealign"
+
+export STAGE=debug
+
+# EDIT:
+export GTEST_DIR=${HOME}/src/googletest/googletest
 
 # iotivity networking
 export IP_API=Default
@@ -25,21 +47,26 @@ export IP_API=Default
 #######################
 ####  OUTPUT DIRS  ####
 
-BUILD_HOME=${IOTIVITY_HOME}
-BUILD_SUBDIR=build
-INSTALL_SUBDIR=sysroots
-LIB_SUBDIR=lib
+export PREFIX=/usr/local
 
-PLATFORM_PREFIX=${TARGET_PLATFORM}/${TARGET_ARCH_TAG}/${STAGE}
+# platform prefix e.g.  darwin/x86_64/release
+PLATFORM_PREFIX=${TARGET_PLATFORM}/${TARGET_MACHINE}/${STAGE}
+
+# IOTIVITY_HOME is set by <platform>.devhost sourcefile
+BUILD_HOME=${IOTIVITY_HOME}
 
 # BUILD_SYSROOT is where transient built products go, including 3rd party libs like gtest
+BUILD_SUBDIR=build
 export BUILD_SYSROOT=${BUILD_HOME}/${BUILD_SUBDIR}/${PLATFORM_PREFIX}
 
 # installable products go in ${INSTALL_SYSROOT}/${PREFIX}
+INSTALL_SUBDIR=sysroots
 export INSTALL_SYSROOT=${BUILD_HOME}/${INSTALL_SUBDIR}/${PLATFORM_PREFIX}
 
 # 3rd-party products go in ${LIB_SYSROOT}/${PREFIX}
-export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${PLATFORM_PREFIX}
+# NB: we do not build separately for each stage (dev, test, prod)
+LIB_SUBDIR=lib
+export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_PLATFORM}/${TARGET_MACHINE}
 
 # not cross-compiling
 # export INSTALL_SYSROOT=/
@@ -51,11 +78,14 @@ export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${PLATFORM_PREFIX}
 
 # e.g. for ctest: "cmake -DCMAKE_INSTALL_PREFIX=${IOTIVITY_HOME}/lib/${PLATFORM_PREFIX}
 
-
-
 #######################
 ####     JAVA      ####
 # TODO: java-dependent stuff goes in java sdk
+# export TARGET_JAVA_HOME=/usr/lib/jvm/java-8-oracle
+# export TARGET_JDK_HOME=/usr/lib/jvm/java-8-oracle
+
+export JDK_INCLUDE_FLAGS="-I${JDK_HOME}/include -I${JDK_HOME}/include/${TARGET_KERNEL}"
+
 # export JAVA_SDK_HOME=${HOME}/android/sdk
 # export GRADLE_HOME=${HOME}/gradle/gradle-2.1.1
 # export JNIPATH="${HOME}/iotivity/kit/java/jni"
@@ -72,40 +102,35 @@ export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${PLATFORM_PREFIX}
 unset TOOLCHAIN_SYSROOT
 unset TARGET_SYSROOT
 unset TOOLCHAIN_BIN_PREFIX
+unset DASH
 
-export ADDR2LINE=${TOOLCHAIN_BIN_PREFIX}addr2line
-export AR="${TOOLCHAIN_BIN_PREFIX}ar"
-export AS="${TOOLCHAIN_BIN_PREFIX}as"
-export CC=${TOOLCHAIN_BIN_PREFIX}gcc
-export CPP=${TOOLCHAIN_BIN_PREFIX}gcc
-export CXX=${TOOLCHAIN_BIN_PREFIX}g++
-export CXXFILT=${TOOLCHAIN_BIN_PREFIX}c++filt
-export ELFEDIT=${TOOLCHAIN_BIN_PREFIX}elfedit
-export GCOV=${TOOLCHAIN_BIN_PREFIX}gcov
-export GDB=${TOOLCHAIN_BIN_PREFIX}gdb
-export GPROF=${TOOLCHAIN_BIN_PREFIX}gprof
-export LD=${TOOLCHAIN_BIN_PREFIX}ld
-export LINK=${TOOLCHAIN_BIN_PREFIX}g++   #???
-export NM=${TOOLCHAIN_BIN_PREFIX}nm
-export OBJCOPY=${TOOLCHAIN_BIN_PREFIX}objcopy
-export OBJDUMP=${TOOLCHAIN_BIN_PREFIX}objdump
-export RANLIB=${TOOLCHAIN_BIN_PREFIX}ranlib
-export READELF=${TOOLCHAIN_BIN_PREFIX}readelf
-export SIZE=${TOOLCHAIN_BIN_PREFIX}size
-export STRINGS=${TOOLCHAIN_BIN_PREFIX}strings
-export STRIP=${TOOLCHAIN_BIN_PREFIX}strip
+export ADDR2LINE=${TOOLCHAIN_BIN_PREFIX}${DASH}addr2line
+export AR="${TOOLCHAIN_BIN_PREFIX}${DASH}ar"
+export AS="${TOOLCHAIN_BIN_PREFIX}${DASH}as"
+export CC=${TOOLCHAIN_BIN_PREFIX}${DASH}gcc
+export CPP=${TOOLCHAIN_BIN_PREFIX}${DASH}gcc
+export CXX=${TOOLCHAIN_BIN_PREFIX}${DASH}g++
+export CXXFILT=${TOOLCHAIN_BIN_PREFIX}${DASH}c++filt
+export ELFEDIT=${TOOLCHAIN_BIN_PREFIX}${DASH}elfedit
+export GCOV=${TOOLCHAIN_BIN_PREFIX}${DASH}gcov
+export GDB=${TOOLCHAIN_BIN_PREFIX}${DASH}gdb
+export GPROF=${TOOLCHAIN_BIN_PREFIX}${DASH}gprof
+export LD=${TOOLCHAIN_BIN_PREFIX}${DASH}ld
+export LINK=${TOOLCHAIN_BIN_PREFIX}${DASH}g++   #???
+export NM=${TOOLCHAIN_BIN_PREFIX}${DASH}nm
+export OBJCOPY=${TOOLCHAIN_BIN_PREFIX}${DASH}objcopy
+export OBJDUMP=${TOOLCHAIN_BIN_PREFIX}${DASH}objdump
+export RANLIB=${TOOLCHAIN_BIN_PREFIX}${DASH}ranlib
+export READELF=${TOOLCHAIN_BIN_PREFIX}${DASH}readelf
+export SIZE=${TOOLCHAIN_BIN_PREFIX}${DASH}size
+export STRINGS=${TOOLCHAIN_BIN_PREFIX}${DASH}strings
+export STRIP=${TOOLCHAIN_BIN_PREFIX}${DASH}strip
 
 export INSTALL="install -c"
 export INSTALLDATA="install -c -m 644"
 
-export GTEST_DIR=${HOME}/src/googletest/googletest
-
 unset SYSFLAG
 # SYSFLAG="--sysroot=${TARGET_SYSROOT}"
-
-#unset TARGET_ARCH
-TARGET_ARCH=" -m64"
-# -march=core2 -mtune=core2 -msse3 -mfpmath=sse -mstackrealign"
 
 OPTIMIZEFLAGS=" -O2 -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer"
 
@@ -118,8 +143,8 @@ export LINKFLAGS="${SYSFLAG}"  # -shared"
 
 # SHLINKFLAG and SHLIBSUFFIX are REQUIRED
 # darwin uses "-dynamiclib" and ".dylib", so we need to be explicit:
-unset SHLINKFLAG
-unset SHLIBSUFFIX
+export SHLINKFLAG="-dynamiclib"
+export SHLIBSUFFIX=".dylib"
 
 # C++ std lib
 export CPPPATH="${TARGET_SYSROOT}/usr/include/c++/4.9.1 \

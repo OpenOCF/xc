@@ -3,11 +3,23 @@
 export IOTIVITY_VERSION=1.1.1
 
 #EDIT: IOTIVITY_HOME
-export IOTIVITY_HOME=${HOME}/iochibity
+#native
+#export IOTIVITY_HOME=${HOME}/iochibity
+
+# using VM (Parallels)
+export IOTIVITY_HOME=/media/psf/Home/iotivity/iochibity
+
+################
+####  JAVA  ####
+# JAVA_HOME: assumed to be set, see fn setjdk in .bash_profile
+
+#EDIT:
+export JAVA_SDK_HOME=${HOME}/android/sdk
+export JAVA_NDK_HOME=${HOME}/android/android-ndk-r12b
 
 ################  edison cross-compile  ################
 #XC_SDK=edison   #  core2-32-poky-linux ???
 # sdk is on dev host, so set this in devhost, not targethost.  targethost uses it.
-export XC_SDK_HOME=/opt/poky-edison/1.7.3
-export TOOLCHAIN_HOST=x86_64-pokysdk-linux
+# export XC_SDK_HOME=/opt/poky-edison/1.7.3
+# export TOOLCHAIN_HOST=x86_64-pokysdk-linux
 
