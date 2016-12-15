@@ -2,12 +2,9 @@
 
 # CAVEAT: source this after sourcing a devhost; that sets e.g. IOTIVITY_HOME
 
-# cat /etc/os-release:  Ubuntu 16.04.1 LTS (Xenial Xirus)
+# tested on:  cat /etc/os-release:  Ubuntu 16.04.1 LTS (Xenial Xirus)
 
-# on VM (Parallels)
-HOME=/media/psf/Home
-
-export TARGET_PLATFORM=ubuntu
+export TARGET_PLATFORM=linux
 #export TARGET_PLATFORM_VERSION=16.04
 
 # uname -s
@@ -32,7 +29,7 @@ TARGET_HWPLATFORM=x86_64
 TARGET_ARCH=" -m64 -march=${TARGET_PROCESSOR} -mtune=${TARGET_PROCESSOR} -msse3 -mfpmath=sse -mstackrealign"
 
 #EDIT: STAGE= debug | dev | prod ??
-export STAGE=debug
+export STAGE=release
 
 # EDIT:
 export GTEST_DIR=${HOME}/src/googletest/googletest
@@ -56,15 +53,25 @@ BUILD_HOME=${IOTIVITY_HOME}
 
 # BUILD_SYSROOT is where product-specific transient built products go
 BUILD_SUBDIR=build
+
 export BUILD_SYSROOT=${BUILD_HOME}/${BUILD_SUBDIR}/${PLATFORM_PREFIX}
 
+
 # installable products go in ${INSTALL_SYSROOT}/${PREFIX}
-INSTALL_SUBDIR=sysroots
+# for Iotivity:
+INSTALL_SUBDIR=out
+# for Iochibity:
+#INSTALL_SUBDIR=sysroots
+
 export INSTALL_SYSROOT=${BUILD_HOME}/${INSTALL_SUBDIR}/${PLATFORM_PREFIX}
 
 # 3rd-party products go in ${LIB_SYSROOT}/${PREFIX}
 # NB: we do not build separately for each stage (dev, test, prod)
-LIB_SUBDIR=lib
+# for Iotivity:
+LIB_SUBDIR=
+# for Iochibity:
+#LIB_SUBDIR=lib
+
 export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_PLATFORM}/${TARGET_MACHINE}
 
 
@@ -81,15 +88,20 @@ export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_PLATFORM}/${TARGET_MACHI
 #######################
 ####     JAVA      ####
 # TODO: java-dependent stuff goes in java sdk
-export TARGET_JAVA_HOME=/usr/lib/jvm/java-7-oracle
+export TARGET_JAVA_HOME=/usr/lib/jvm/default-java
+#export TARGET_JAVA_HOME=/usr/lib/jvm/java-7-oracle
 #export TARGET_JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 #export TARGET_JAVA_HOME=/usr/lib/jvm/java-8-oracle
 #export TARGET_JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-export TARGET_JDK_HOME=/usr/lib/jvm/java-7-oracle
+export TARGET_JDK_HOME=/usr/lib/jvm/default-java
+#export TARGET_JDK_HOME=/usr/lib/jvm/java-7-oracle
 #export TARGET_JDK_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 #export TARGET_JDK_HOME=/usr/lib/jvm/java-8-oracle
 #export TARGET_JDK_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+# the following is to get access to jni headers
+export TARGET_JVM_HOST=linux
 
 export JDK_INCLUDE_FLAGS="-I${JDK_HOME}/include -I${JDK_HOME}/include/${TARGET_KERNEL}"
 
@@ -168,7 +180,7 @@ export CPPPATH="${TARGET_SYSROOT}/usr/include/c++/4.9.1 \
 export CPLUS_INCLUDE_PATH="-I${TARGET_SYSROOT}/usr/include/c++/4.9.1 \
        -I${TARGET_SYSROOT}/usr/include/c++/4.9.1/${TOOLCHAIN_BIN_PREFIX}"
 
-# for iotivity:
+# for cross-compile targeting linux:
 # we already know what's available on the target so we hardcode:
 # export CPPDEFINES="HAVE_ARPA_INET_H \
 #        HAVE_ASSERT_H HAVE_FCNTL_H HAVE_LIMITS_H HAVE_NETDB_H \
@@ -184,3 +196,8 @@ export TOOLCHAIN_PATH=${TOOLCHAIN_SYSROOT}/usr/bin:${TOOLCHAIN_SYSROOT}/usr/bin/
 
 export SYS_PATH=$PATH
 export PATH=${TOOLCHAIN_PATH}:${PATH}
+
+# Iotivity:
+export LD_LIBRARY_PATH=${INSTALL_SYSROOT}
+# Iochibity:
+#export LD_LIBRARY_PATH=${INSTALL_SYSROOT}/lib

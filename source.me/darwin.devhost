@@ -1,5 +1,8 @@
 # source this file to setup the iotivity build environment on darwin
 
+#export IOTIVITY_FLAVOR=IOTIVITY
+export IOTIVITY_FLAVOR=IOCHIBITY
+
 export IOTIVITY_VERSION=1.1.1
 export IOTIVITY_HOME=${HOME}/iotivity/iochibity
 

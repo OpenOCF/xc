@@ -1,13 +1,26 @@
 # source this file to setup the iotivity build environment on linux
 
-export IOTIVITY_VERSION=1.1.1
+export IOTIVITY_FLAVOR=IOTIVITY
+#export IOTIVITY_FLAVOR=IOCHIBITY
+
+# iochibity:
+#export IOTIVITY_VERSION=1.1.1
+# iotivity:
+export IOTIVITY_VERSION=1.2.1
+
+# cross-compiling iochibity on VM (Parallels):
+#HOME=/media/psf/Home
+# native linux:
+HOME=/home/gar
 
 #EDIT: IOTIVITY_HOME
-#native
-#export IOTIVITY_HOME=${HOME}/iochibity
 
-# using VM (Parallels)
-export IOTIVITY_HOME=/media/psf/Home/iotivity/iochibity
+#iotivity:
+export IOTIVITY_HOME=${HOME}/iotivity-1.2.1
+# iochibity (native):
+#export IOTIVITY_HOME=${HOME}/iochibity
+# iochibity using VM (Parallels)
+#export IOTIVITY_HOME=/media/psf/Home/iotivity/iochibity
 
 ################
 ####  JAVA  ####

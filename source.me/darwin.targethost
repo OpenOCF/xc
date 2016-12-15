@@ -81,12 +81,21 @@ export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_PLATFORM}/${TARGET_MACHI
 #######################
 ####     JAVA      ####
 # TODO: java-dependent stuff goes in java sdk
-# export TARGET_JAVA_HOME=/usr/lib/jvm/java-8-oracle
-# export TARGET_JDK_HOME=/usr/lib/jvm/java-8-oracle
+export TARGET_JAVA_HOME=${JAVA_HOME}
+export TARGET_JDK_HOME=${JAVA_HOME}
+
+# the following is to get access to jni headers
+export TARGET_JVM_HOST=darwin
 
 export JDK_INCLUDE_FLAGS="-I${JDK_HOME}/include -I${JDK_HOME}/include/${TARGET_KERNEL}"
 
 # export JAVA_SDK_HOME=${HOME}/android/sdk
+
+# for testing with iotivity:
+## export MAVEN_OPTS=${INSTALL_SYSROOT}
+# for testing with iochibity:
+export MAVEN_OPTS=${INSTALL_SYSROOT}/lib
+
 # export GRADLE_HOME=${HOME}/gradle/gradle-2.1.1
 # export JNIPATH="${HOME}/iotivity/kit/java/jni"
 # JLP = java.library.path
@@ -145,6 +154,9 @@ export LINKFLAGS="${SYSFLAG}"  # -shared"
 # darwin uses "-dynamiclib" and ".dylib", so we need to be explicit:
 export SHLINKFLAG="-dynamiclib"
 export SHLIBSUFFIX=".dylib"
+
+# for Java builds:
+export JNILIBSUFFIX=".jnilib"
 
 # C++ std lib
 export CPPPATH="${TARGET_SYSROOT}/usr/include/c++/4.9.1 \
