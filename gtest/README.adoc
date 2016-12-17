@@ -34,9 +34,9 @@ $ cd gtest
 $ make && make install
 ----
 
-This will build googletest and install it in `${INSTALL_SYSROOT}/lib`,
+This will build googletest and install it in `${LIB_SYSROOT}/lib`,
 which is set by the `sourc` ed files.  In my case that means
 `$HOME/iochibity/lib/linux/x86_64/lib`.
 
-It also copies the googletest headers to `${INSTALL_SYSROOT}/include`.
+It also copies the googletest headers to `${LIB_SYSROOT}/include`.
 

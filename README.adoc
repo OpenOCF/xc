@@ -15,28 +15,29 @@ placed as a kind of target dir.  But in "target arch" and similar
 "target" refers not to a build product but to the arch etc. for which
 we are building products.  So some TARGET_x vars refer to the latter,
 some to the former.  For example, TARGET_PREFIX controls where some
-build products are to be placed, but TARGET_SYSROOT refers to a
+build products are to be placed, but TARGET_SYSROOT would refer to a
 filesystem location where target-arch binaries, include files etc. are
 to be read by the build process.  We never use TARGET_ to refer to
-writable output directories; instead we use BUILD_ and INSTALL_.
+writable output directories; instead we use BUILD_ and INSTALL_
+(e.g. INSTALL_SYSROOT).
 
 === Definition of Terms
 
 * XC_SDK - Cross Compile SDK name, e.g. edison
 * XC_SDK_HOME - e.g. /opt/poky-edison/1.7.3
 
-==== prefixes
+== Examples
 
-* PREFIX - this is the standard autotools/make prefix, which
-  determines where built products will be /installed/.  Always interpreted
-  relative to the appropriate SYSROOT (see below) and TARGET_PREFIX.
-  The PREFIX will be the same for all builds.  Default: `/usr/local`
+Transient build products go in
 
-NOTE: PREFIX is only used to control installation of final build
-products; it is not used to control placement of intermediate build
-products.
+[source,sh]
+----
+BUILD_SYSROOT=${BUILD_HOME}/${BUILD_SUBDIR}/${PLATFORM_PREFIX}
+e.g.
+$HOME/iotivity/build/darwin/x86_64/debug
+----
 
-Installation of build products is determined by:
+Installation of built products is determined by:
 
 [source,sh]
 ----
@@ -47,7 +48,7 @@ e.g.
 
 
 
-* TARGET_PREFIX - this is like PREFIX, but is build-specific, which
+* PLATFORM_PREFIX - this is like PREFIX, but is build-specific, which
   allows us to build for multiple targets on one host system.  Its
   form is `<platform>/<arch>/<stage>`, e.g.
 
@@ -64,7 +65,9 @@ e.g.
 ----
 
 
-==== sysroots
+=== sysroots
+
+NOTE: This documentation may be outdated; check the source files.
 
 A sysroot is a directory that serves as a virtual filesystem root, the
 conceptual equivalent of "/" on a standard Unix-like system.
@@ -119,6 +122,17 @@ The previous two sysroots are read-only; the next two are read-write:
 ----
 /tmp/iotivity/sysroots/android/armeabi-v7a/release/usr/local
 ----
+
+* LIB_SYSROOT - for third-party components, e.g. googletest. For example:
+
+[source,sh]
+----
+$ echo $LIB_SYSROOT
+/Users/gar/iotivity/iochibity/lib/darwin/x86_64
+----
+
+which contains `lib/` and `include/` subdirs.
+
 
 ==== toolchain vars
 
