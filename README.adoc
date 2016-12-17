@@ -2,6 +2,12 @@
 generic cross compiling toolkit
 
 
+This is a collection of files to be `source` ed in order to set the
+environment variables needed to support cross-compilation.
+
+It also includes a simple Makefile for building GoogleTest
+appropriately.  See the link:gtest/README.adoc[README.adoc] in link:gtest/README.adoc[./gtest].
+
 WARNING: Note that "target" is used in two senses.  A "build target"
 is something to be constructed by the build process, so one could
 reasonably think of the output directory where such products are

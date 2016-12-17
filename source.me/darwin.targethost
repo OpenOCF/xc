@@ -33,7 +33,7 @@ unset TARGET_ARCH
 # TARGET_ARCH=" -m64 -march=${TARGET_PROCESSOR} -mtune=${TARGET_PROCESSOR}
 # -msse3 -mfpmath=sse -mstackrealign"
 
-export STAGE=debug
+export STAGE=release
 
 # EDIT:
 export GTEST_DIR=${HOME}/src/googletest/googletest
@@ -96,6 +96,7 @@ export JDK_INCLUDE_FLAGS="-I${JDK_HOME}/include -I${JDK_HOME}/include/${TARGET_K
 # for testing with iochibity:
 export MAVEN_OPTS=${INSTALL_SYSROOT}/lib
 
+# FIME: obsolete?
 # export GRADLE_HOME=${HOME}/gradle/gradle-2.1.1
 # export JNIPATH="${HOME}/iotivity/kit/java/jni"
 # JLP = java.library.path
@@ -106,8 +107,10 @@ export MAVEN_OPTS=${INSTALL_SYSROOT}/lib
 ##################################
 ########  TOOLCHAIN VARS  ########
 ##################################
-# most toolchain vars taken from /opt/poky-edison/1.7.3/environment-setup-core2-32-poky-linux
 
+# EDIT-ME - leave these unset if your devhost is darwin
+# if your devhost is Linux you'll need to set them as needed
+# but this has not yet been tested.
 unset TOOLCHAIN_SYSROOT
 unset TARGET_SYSROOT
 unset TOOLCHAIN_BIN_PREFIX

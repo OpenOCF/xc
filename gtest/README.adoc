@@ -1,0 +1,42 @@
+= googletest for cross-compiling
+
+This directory contains is a simple Makefile for
+https://github.com/google/googletest[googletest], derived from the
+sample Makefile in the distribution.
+
+To use it, first clone or download the googletest repository.
+
+The Makefile is designed to work with the environmental variables set
+by the files in link:../source.me[../source.me], so the next step is
+check the `source.me` files and enable/edit as appropriate.  For
+example, if you are cross-compiling from a Mac devhost targeting the
+Intel Edison, you will source `darwin.devhost` and
+`edison.targethost`, in that order.
+
+Before `source` ing files, do a search on `iochibity` and `EDIT-ME` in
+both devhost and targethost files, and enable/edit accordingly.  For
+example:
+
+* set `GTEST_DIR` in the targethost file to wherever you cloned/downloaded the googletest repo.
+* export the appropriate value for `IOTIVITY_IMPLEMENTATION=IOTIVITY` in the devhost file.
+* export the correct value for `IOTIVITY_HOME`.
+* etc.
+
+
+For example, if you are developing Iochibity on Linux, targeting
+Linux, then from the xc root to this:
+
+[source,sh]
+----
+$ source source.me/darwin.devhost
+$ source source.me/darwin.targethost
+$ cd gtest
+$ make && make install
+----
+
+This will build googletest and install it in `${INSTALL_SYSROOT}/lib`,
+which is set by the `sourc` ed files.  In my case that means
+`$HOME/iochibity/lib/linux/x86_64/lib`.
+
+It also copies the googletest headers to `${INSTALL_SYSROOT}/include`.
+

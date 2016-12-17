@@ -1,5 +1,7 @@
 # source this file from IOTIVITY_HOME to setup the iotivity build environment
 
+# Tested on OS X; should work on Linux but not yet tested
+
 # CAVEAT: source this after sourcing a devhost; that sets e.g. IOTIVITY_HOME
 export TARGET_PLATFORM=edison
 export TARGET_PLATFORM_VERSION=1.7.3   # 3.5?
@@ -29,7 +31,7 @@ export TARGET_ARCH="-m${TARGET_BITS} -march=${TARGET_PROCESSOR} -mtune=${TARGET_
 #EDIT: STAGE= debug | dev | prod ??
 export STAGE=debug
 
-# EDIT:
+# EDIT-ME:
 export GTEST_DIR=${HOME}/src/googletest/googletest
 
 # iotivity networking

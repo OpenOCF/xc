@@ -1,5 +1,10 @@
 # Edison
 
+# You probably do not want to develop on the Edison itself; better to
+# cross-compile from Darwin (OS X) or Linux.  But for completeness:
+
+export IOTIVITY_IMPLEMENTATION=IOCHIBITY
+
 export IOTIVITY_HOST_OS=linux
 export IOTIVITY_HOST_ARCH=x86
 
