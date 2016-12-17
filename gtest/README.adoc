@@ -7,30 +7,17 @@ sample Makefile in the distribution.
 To use it, first clone or download the googletest repository.
 
 The Makefile is designed to work with the environmental variables set
-by the files in link:../source.me[../source.me], so the next step is
-check the `source.me` files and enable/edit as appropriate.  For
-example, if you are cross-compiling from a Mac devhost targeting the
-Intel Edison, you will source `darwin.devhost` and
-`edison.targethost`, in that order.
-
-Before `source` ing files, do a search on `iochibity` and `EDIT-ME` in
-both devhost and targethost files, and enable/edit accordingly.  For
-example:
+by the files in link:../source.me[../source.me].
 
 * set `GTEST_DIR` in the targethost file to wherever you cloned/downloaded the googletest repo.
-* export the appropriate value for `IOTIVITY_IMPLEMENTATION=IOTIVITY` in the devhost file.
-* export the correct value for `IOTIVITY_HOME`.
-* etc.
+* edit the devhost and targethost files as explained in the link:../README.adoc[xc README]
 
-
-For example, if you are developing Iochibity on Linux, targeting
-Linux, then from the xc root to this:
+Then `source` the appropriate files (devhost, then targethost) and run make:
 
 [source,sh]
 ----
 $ source source.me/darwin.devhost
 $ source source.me/darwin.targethost
-$ cd gtest
 $ make && make install
 ----
 

@@ -3,28 +3,37 @@ generic cross compiling toolkit
 
 
 This is a collection of files to be `source` ed in order to set the
-environment variables needed to support cross-compilation.
+environment variables needed to support cross-compilation.  Several
+related https://github.com/iotk[iotk] projects use this system to support building for multiple
+targets using a single source tree, in particular https://github.com/iotk/iochibity[iochibity] and https://github.com/iotk/iochibity-java[iochibity-java].
 
 It also includes a simple Makefile for building GoogleTest
 appropriately.  See the link:gtest/README.adoc[README.adoc] in link:gtest/README.adoc[./gtest].
 
-WARNING: Note that "target" is used in two senses.  A "build target"
-is something to be constructed by the build process, so one could
-reasonably think of the output directory where such products are
-placed as a kind of target dir.  But in "target arch" and similar
-"target" refers not to a build product but to the arch etc. for which
-we are building products.  So some TARGET_x vars refer to the latter,
-some to the former.  For example, TARGET_PREFIX controls where some
-build products are to be placed, but TARGET_SYSROOT would refer to a
-filesystem location where target-arch binaries, include files etc. are
-to be read by the build process.  We never use TARGET_ to refer to
-writable output directories; instead we use BUILD_ and INSTALL_
-(e.g. INSTALL_SYSROOT).
+To use, just source the appropriate `devhost` and `targethost` files
+in the `source.me` directory.  For example, if you are
+cross-compiling from a Mac devhost targeting the Intel Edison, you
+will source `darwin.devhost` and `edison.targethost`, in that order.
 
-=== Definition of Terms
+But before you `source` the files, do a search on `iochibity` and
+`EDIT-ME` in both devhost and targethost files, and enable/edit
+accordingly.  For example:
 
-* XC_SDK - Cross Compile SDK name, e.g. edison
-* XC_SDK_HOME - e.g. /opt/poky-edison/1.7.3
+* export the appropriate value for `IOTIVITY_IMPLEMENTATION=IOTIVITY` in the devhost file.
+* export the correct value for `IOTIVITY_HOME`.
+* etc.
+
+
+For example, if you are developing Iochibity on Linux, targeting
+Linux, then from the xc root to this:
+
+[source,sh]
+----
+$ source source.me/darwin.devhost
+$ source source.me/darwin.targethost
+----
+
+Then `cd` to your project directory and build.
 
 == Examples
 
@@ -46,6 +55,25 @@ e.g.
 /tmp/iotivity/sysroots/android/armeabi-v7a/release/usr/local
 ----
 
+
+
+=== Definition of Terms
+
+* XC_SDK - Cross Compile SDK name, e.g. edison
+* XC_SDK_HOME - e.g. /opt/poky-edison/1.7.3
+
+WARNING: Note that "target" is used in two senses.  A "build target"
+is something to be constructed by the build process, so one could
+reasonably think of the output directory where such products are
+placed as a kind of target dir.  But in "target arch" and similar
+"target" refers not to a build product but to the arch etc. for which
+we are building products.  So some TARGET_x vars refer to the latter,
+some to the former.  For example, TARGET_PREFIX controls where some
+build products are to be placed, but TARGET_SYSROOT would refer to a
+filesystem location where target-arch binaries, include files etc. are
+to be read by the build process.  We never use TARGET_ to refer to
+writable output directories; instead we use BUILD_ and INSTALL_
+(e.g. INSTALL_SYSROOT).
 
 
 * PLATFORM_PREFIX - this is like PREFIX, but is build-specific, which
