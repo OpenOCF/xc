@@ -81,8 +81,8 @@ sample1_unittest.o : $(USER_DIR)/sample1_unittest.cc \
                      $(USER_DIR)/sample1.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1_unittest.cc
 
-sample1_unittest : sample1.o sample1_unittest.o libgtest.a libgtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(CPLUS_INCLUDE_PATH) -lpthread $^ -o $@
+sample1_unittest : sample1.o sample1_unittest.o ./libgtest.a ./libgtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(CPLUS_INCLUDE_PATH) -L. -lgtest -lgtest_main -lpthread $^ -o $@
 
 install: libgtest.a libgtest_main.a
 	echo "INSTALL_SYSROOT: " $(LIB_SYSROOT)
