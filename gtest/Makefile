@@ -26,8 +26,7 @@ CPPFLAGS += -isystem $(GTEST_DIR)/include
 CPPFLAGS += $(CPLUS_INCLUDE_PATH)
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -g -Wall -Wextra
-# -pthread
+CXXFLAGS += -g -Wall -Wextra -pthread
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
@@ -82,7 +81,7 @@ sample1_unittest.o : $(USER_DIR)/sample1_unittest.cc \
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1_unittest.cc
 
 sample1_unittest : sample1.o sample1_unittest.o libgtest.a libgtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(CPLUS_INCLUDE_PATH) -lpthread $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(CPLUS_INCLUDE_PATH) -L. -lgtest -lpthread $^ -o $@
 
 install: libgtest.a libgtest_main.a
 	echo "INSTALL_SYSROOT: " $(LIB_SYSROOT)

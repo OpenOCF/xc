@@ -4,23 +4,24 @@ export IOTIVITY_IMPLEMENTATION=IOTIVITY
 #export IOTIVITY_IMPLEMENTATION=IOCHIBITY
 
 # iochibity:
-#export IOTIVITY_VERSION=1.1.1
+##export IOTIVITY_VERSION=1.1.1
 # iotivity:
 export IOTIVITY_VERSION=1.2.1
 
-# cross-compiling iochibity on VM (Parallels):
-#HOME=/media/psf/Home
+# VM compiling - Linux on VM (Parallels):
+HOME=/media/psf/Home
 # native linux:
-HOME=/home/gar
+##HOME=/home/gar
 
-#EDIT: IOTIVITY_HOME
-
+#EDIT-ME: IOTIVITY_HOME
 #iotivity:
-export IOTIVITY_HOME=${HOME}/iotivity-1.2.1
+##export IOTIVITY_HOME=${HOME}/iotivity-1.2.1
+export IOTIVITY_HOME=/home/gar/iotivity-1.2.1
+
 # iochibity (native):
-#export IOTIVITY_HOME=${HOME}/iochibity
+##export IOTIVITY_HOME=${HOME}/iochibity
 # iochibity on a Linux VM (Parallels) on OS X:
-#export IOTIVITY_HOME=/media/psf/Home/iochibity
+##export IOTIVITY_HOME=/media/psf/Home/iotivity/iochibity
 
 ################
 ####  JAVA  ####
