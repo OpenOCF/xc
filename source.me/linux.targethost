@@ -59,18 +59,20 @@ export BUILD_SYSROOT=${BUILD_HOME}/${BUILD_SUBDIR}/${PLATFORM_PREFIX}
 
 # installable products go in ${INSTALL_SYSROOT}/${PREFIX}
 # for Iotivity:
-INSTALL_SUBDIR=out
+##INSTALL_SUBDIR=out
 # for Iochibity:
-##INSTALL_SUBDIR=sysroots
+INSTALL_SUBDIR=sysroots
 
 export INSTALL_SYSROOT=${BUILD_HOME}/${INSTALL_SUBDIR}/${PLATFORM_PREFIX}
 
 # 3rd-party products go in ${LIB_SYSROOT}/${PREFIX}
+# for Iochibity:
+LIB_SUBDIR=lib
 # NB: we do not build separately for each stage (dev, test, prod)
 # for Iotivity:
-LIB_SUBDIR=out
+##LIB_SUBDIR=out
 # for Iochibity:
-##LIB_SUBDIR=lib
+LIB_SUBDIR=lib
 
 export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_PLATFORM}/${TARGET_MACHINE}
 
@@ -194,6 +196,6 @@ export SYS_PATH=$PATH
 export PATH=${TOOLCHAIN_PATH}:${PATH}
 
 # Iotivity:
-export LD_LIBRARY_PATH=${INSTALL_SYSROOT}
+##export LD_LIBRARY_PATH=${INSTALL_SYSROOT}
 # Iochibity:
-#export LD_LIBRARY_PATH=${INSTALL_SYSROOT}/lib
+export LD_LIBRARY_PATH=${INSTALL_SYSROOT}/lib
