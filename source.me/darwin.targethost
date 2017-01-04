@@ -101,8 +101,8 @@ export LIB_SYSROOT=${BUILD_HOME}/${LIB_SUBDIR}/${TARGET_PLATFORM}/${TARGET_MACHI
 
 # e.g. for ctest: "cmake -DCMAKE_INSTALL_PREFIX=${IOTIVITY_HOME}/lib/${PLATFORM_PREFIX}
 
-#######################
-####     JAVA      ####
+###########################
+####     JAVA 8 only   ####
 # TODO: java-dependent stuff goes in java sdk
 export TARGET_JAVA_HOME=${JAVA_HOME}
 export TARGET_JDK_HOME=${JAVA_HOME}
@@ -118,6 +118,7 @@ export JDK_INCLUDE_FLAGS="-I${JDK_HOME}/include -I${JDK_HOME}/include/${TARGET_K
 ## export MAVEN_OPTS=${INSTALL_SYSROOT}
 # for testing with iochibity:
 export MAVEN_OPTS=-Djava.library.path=${INSTALL_SYSROOT}/lib
+#export MAVEN_OPTS=-Djava.library.path=${INSTALL_SYSROOT}/lib:${HOME}/.m2/repository/io/mraa/mraa/1.5.1
 
 # FIME: obsolete?
 # export GRADLE_HOME=${HOME}/gradle/gradle-2.1.1

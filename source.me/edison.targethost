@@ -28,7 +28,7 @@ export TARGET_HWPLATFORM=x86
 #unset TARGET_ARCH
 export TARGET_ARCH="-m${TARGET_BITS} -march=${TARGET_PROCESSOR} -mtune=${TARGET_PROCESSOR} -msse3 -mfpmath=sse -mstackrealign"
 
-#EDIT: STAGE= debug | dev | prod ??
+#EDIT-ME: STAGE= debug | dev | prod ??
 export STAGE=debug
 
 # EDIT-ME:

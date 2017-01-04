@@ -4,7 +4,7 @@
 export IOTIVITY_IMPLEMENTATION=IOCHIBITY
 
 export IOTIVITY_VERSION=1.1.1
-export IOTIVITY_HOME=${HOME}/iotivity/iochibity  # EDIT-ME
+export IOTIVITY_HOME=${HOME}/iochibity  # EDIT-ME
 
 #######################
 # iotivity networking
