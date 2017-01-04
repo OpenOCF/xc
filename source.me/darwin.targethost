@@ -1,4 +1,4 @@
-# source this file from IOTIVITY_HOME to setup the iotivity build environment
+# source this file to setup the iotivity build environment
 
 # CAVEAT: source this after sourcing a devhost; that sets e.g. IOTIVITY_HOME
 
@@ -7,8 +7,31 @@
 # ProductVersion:	10.11.5
 # BuildVersion:  	15F34
 
+# Sierra:
+# $ sw_vers:
+# ProductName:		Mac OS X
+# ProductVersion:	10.12.2
+# BuildVersion:		16C68
+# $ uname -r
+# 16.3.0
+#
+# $ system_profiler SPSoftwareDataType
+# Software:
+#     System Software Overview:
+#       System Version: macOS 10.12.2 (16C68)
+#       Kernel Version: Darwin 16.3.0
+#       Boot Volume: Macintosh HD
+#       Boot Mode: Normal
+#       Computer Name: gerasmb
+#       User Name: Gregg Reynolds (gar)
+#       Secure Virtual Memory: Enabled
+#       System Integrity Protection: Enabled
+#       Time since boot: 22 minutes
+
+
+
 export TARGET_PLATFORM=darwin
-export TARGET_PLATFORM_VERSION=10.11
+export TARGET_PLATFORM_VERSION=10.12
 
 # ??? freebsd? mach?
 export TARGET_KERNEL=mach
@@ -16,7 +39,7 @@ export TARGET_KERNEL=mach
 # $ uname -s  (lower-cased)
 export TARGET_OS=darwin
 # $ uname -r
-export TARGET_OS_VERSION=15.5.0
+export TARGET_OS_VERSION=16.3.0
 
 export TARGET_BITS=64
 #  uname -m
@@ -33,7 +56,7 @@ unset TARGET_ARCH
 # TARGET_ARCH=" -m64 -march=${TARGET_PROCESSOR} -mtune=${TARGET_PROCESSOR}
 # -msse3 -mfpmath=sse -mstackrealign"
 
-export STAGE=release
+export STAGE=debug
 
 # EDIT:
 export GTEST_DIR=${HOME}/src/googletest/googletest
@@ -94,7 +117,7 @@ export JDK_INCLUDE_FLAGS="-I${JDK_HOME}/include -I${JDK_HOME}/include/${TARGET_K
 # for testing with iotivity:
 ## export MAVEN_OPTS=${INSTALL_SYSROOT}
 # for testing with iochibity:
-export MAVEN_OPTS=${INSTALL_SYSROOT}/lib
+export MAVEN_OPTS=-Djava.library.path=${INSTALL_SYSROOT}/lib
 
 # FIME: obsolete?
 # export GRADLE_HOME=${HOME}/gradle/gradle-2.1.1
